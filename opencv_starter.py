@@ -1,12 +1,10 @@
 import cv2 as cv
 import matplotlib.pyplot as plt
 import numpy as np
-import time
 
 def threshold(img,thresh):
     for x in range(0, img.shape[0]):
         for y in range(0, img.shape[1]):
-            #Error not supported between instances of 'int' and 'NoneType'
             if img[x,y] > thresh:
                 img[x,y] = 255
             else:
@@ -16,11 +14,11 @@ def threshold(img,thresh):
 #get img and analysis the peaks of the pixels using otsu's method
 def auto_threshold(img):
 
-    #hist = histogram(img)
-    hist = np.zeros(256)
-    for x in range(0, img.shape[0]):
-        for y in range(0, img.shape[1]):
-            hist[img[x,y]] += 1
+    hist = histogram(img)
+    #hist = np.zeros(256)
+    #for x in range(0, img.shape[0]):
+        #for y in range(0, img.shape[1]):
+            #hist[img[x,y]] += 1
 
     #get the total number of pixels
     total = img.shape[0] * img.shape[1]
@@ -38,16 +36,16 @@ def auto_threshold(img):
     for t in range(256):
         wB += hist[t]
         #Weight background
-        if wB == 0:
+        if (wB == 0):
             continue
         #Weight forground
         wF = total - wB
-        if wF == 0:
+        if (wF == 0):
             break
         sumB += t * hist[t]
         #Mean background
         mB = sumB / wB
-        #Mean background
+        #Mean foreground
         mF = (sum - sumB) / wF
 
         # calculate the betwwen class variance 
@@ -57,6 +55,8 @@ def auto_threshold(img):
         if varBetween > varMax:
             varMax = varBetween
             threshold = t
+
+        return threshold
         
 
 
