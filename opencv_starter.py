@@ -6,6 +6,7 @@ import time
 def threshold(img,thresh):
     for x in range(0, img.shape[0]):
         for y in range(0, img.shape[1]):
+            #Error not supported between instances of 'int' and 'NoneType'
             if img[x,y] > thresh:
                 img[x,y] = 255
             else:
@@ -15,7 +16,11 @@ def threshold(img,thresh):
 #get img and analysis the peaks of the pixels using otsu's method
 def auto_threshold(img):
 
-    hist = histogram(img)
+    #hist = histogram(img)
+    hist = np.zeros(256)
+    for x in range(0, img.shape[0]):
+        for y in range(0, img.shape[1]):
+            hist[img[x,y]] += 1
 
     #get the total number of pixels
     total = img.shape[0] * img.shape[1]
@@ -43,7 +48,7 @@ def auto_threshold(img):
         #Mean background
         mB = sumB / wB
         #Mean background
-        mF = (sum - sumB) / mF
+        mF = (sum - sumB) / wF
 
         # calculate the betwwen class variance 
         varBetween = wB * wF * (mB - mF) * (mB - mF)
